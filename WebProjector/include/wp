@@ -1,0 +1,51 @@
+#ifndef ___WP
+#define ___WP 13
+#include<iostream>
+#include<map>
+using namespace std;
+namespace wp
+{
+class Request
+{
+public:
+char *method;
+char *resource;
+char isClientSideTechnologyResource;
+char *mimeType;
+int dataCount;
+char **data;
+string forwardTo;
+map<string,string> keyValues;
+void setKeyValue(string k,string v);
+string getValue(string k);
+string get(string name); //to extract data that has arrived in request
+void forward(string forwardTo);	
+};
+class Response
+{
+private:
+int clientSocketDescriptor;
+bool isClosed;
+bool headerCreated;
+void createHeader();
+public:
+Response(int clientSocketDescriptor);
+void write(const char *str);
+void write(string str);
+void close();
+};
+class WebProjector
+{
+private:
+int portNumber;
+// char *url;
+// void (*ptrOnRequest)(Request &,Response &);
+map<string,void (*)(Request &,Response &)> requestMappings;
+public:
+WebProjector(int portNumber);
+~WebProjector(); //destructor for reducing DMA
+void start();
+void onRequest(string url,void (*ptrOnRequest)(Request &,Response &));
+};
+}
+#endif

@@ -1,0 +1,1 @@
+g++ -static *.cpp -o myapp.exe -I ..\WebProjector\include -L ..\WebProjector\lib -lwp -lws2_32
